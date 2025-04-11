@@ -13,7 +13,6 @@ import { extractAndLoadChunksLazy, findStoreLazy } from "@webpack";
 import { Menu } from "@webpack/common";
 
 import { SetAvatarModal } from "./AvatarModal";
-
 export const KEY_DATASTORE = "vencord-customavatars";
 export const KEY_STYLESHEET = "vencord-customavatars-style";
 export let avatars: Record<string, string> = {};
@@ -33,7 +32,7 @@ const settings = definePluginSettings({
         default: true
     }
 });
-
+export { settings };
 export function getCustomAvatarString(userId: string, withHash?: boolean): string | undefined {
     if (!avatars[userId] || !Settings.plugins.CustomUserAvatars.enabled)
         return;
