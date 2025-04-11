@@ -5,13 +5,12 @@
  */
 
 import { set } from "@api/DataStore";
-import { Settings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { Button, Forms, TextInput, useState } from "@webpack/common";
 
-import { avatars, KEY_DATASTORE, KEY_STYLESHEET } from "./index";
+import { avatars, KEY_DATASTORE, KEY_STYLESHEET, settings } from "./index";
 
 const cl = classNameFactory("vc-customavatars-");
 function ReloadWarningModal({ modalProps }: { modalProps: ModalProps; }) {
@@ -64,7 +63,7 @@ img[src*="cdn.discordapp.com/avatars/${id}"] {
 
         await set(KEY_STYLESHEET, css);
 
-        if (Settings.plugins.CustomUserAvatars.enableReloadWarning) {
+        if (settings.store.enableReloadWarning) {
             setShowReloadModal(true);
         }
     }
@@ -82,7 +81,7 @@ img[src*="cdn.discordapp.com/avatars/${id}"] {
 
         await set(KEY_STYLESHEET, css);
 
-        if (Settings.plugins.CustomUserAvatars.enableReloadWarning) {
+        if (settings.store.enableReloadWarning) {
             setShowReloadModal(true);
         }
     }
