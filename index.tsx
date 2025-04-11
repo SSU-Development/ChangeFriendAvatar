@@ -4,29 +4,91 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { get } from "@api/DataStore";
+import { definePluginSettings, Settings } from "@api/Settings";
 import { PencilIcon } from "@components/Icons";
-import definePlugin from "@utils/types";
+import { openModal } from "@utils/modal";
+import definePlugin, { OptionType } from "@utils/types";
+import { extractAndLoadChunksLazy, findStoreLazy } from "@webpack";
 import { Menu } from "@webpack/common";
-import { User } from "discord-types/general";
+
+import { SetAvatarModal } from "./AvatarModal";
+
+export const KEY_DATASTORE = "vencord-customavatars";
+export const KEY_STYLESHEET = "vencord-customavatars-style";
+export let avatars: Record<string, string> = {};
+
+let styleEl: HTMLStyleElement | null = null;
+
+(async () => {
+    avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
+})();
+
+const UserStore = findStoreLazy("UserStore") as typeof import("@webpack/common").UserStore;
+
+const settings = definePluginSettings({
+    enableReloadWarning: {
+        type: OptionType.BOOLEAN,
+        description: "Enable or disable the reload warning modal after changing the avatar",
+        default: true
+    }
+});
+
+export function getCustomAvatarString(userId: string, withHash?: boolean): string | undefined {
+    if (!avatars[userId] || !Settings.plugins.CustomUserAvatars.enabled)
+        return;
+    return avatars[userId];
+}
+
 
 export default definePlugin({
     name: "ChangeFriendAvatar",
-    description: "Allows you to change your friends' avatars, similar to chaning their nickname.",
-    authors: [{ name: "Sophia", id: 1012095822957133976n }],
+    description: "Set custom avatar URLs for any user",
+    authors: [
+        {
+            name: "Sophia",
+            id: 1012095822957133976n
+        }
+    ],
+
+    settings,
+    getCustomAvatarString,
+
+    patches: [],
+
+    contextMenus: {
+        "user-context": (children, { user }) => {
+            if (!user?.id) return;
+
+            children.push(
+                <Menu.MenuSeparator />,
+                <Menu.MenuItem
+                    label="Set Avatar"
+                    id="set-avatar"
+                    icon={PencilIcon}
+                    action={async () => {
+                        await extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
+                        openModal(modalProps => <SetAvatarModal userId={user.id} modalProps={modalProps} />);
+                    }}
+                />
+            );
+        }
+    },
+
+    async start() {
+        const css = await get(KEY_STYLESHEET);
+        if (css) {
+            styleEl = document.createElement("style");
+            styleEl.id = "vc-custom-avatar-style";
+            styleEl.textContent = css;
+            document.head.appendChild(styleEl);
+        }
+    },
+
+    stop() {
+        if (styleEl) {
+            styleEl.remove();
+            styleEl = null;
+        }
+    }
 });
-
-export function openAvatarChanger(discordId: string) {
-}
-
-const userContextPatch: NavContextMenuPatchCallback = (children, { user }: { user?: User, onClose(): void; }) => {
-    if (!user) return;
-    children.push(
-        <Menu.MenuItem
-            label="Change Friend Nickname"
-            id="vc-friend-avatars"
-            icon={PencilIcon}
-            action={() => openAvatarChanger(user.id)}
-        />
-    );
-};
