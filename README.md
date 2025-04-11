@@ -12,5 +12,6 @@ Now I know the top one LOOKS appealing but that's not the main focus<br><br>
 3. Build vencord and inject it. [https://docs.vencord.dev/installing/#building-vencord](https://docs.vencord.dev/installing/#building-vencord)
 4. Restart Discord (If previously open)
 5. Enable the plugin in Settings > Vencord/Equicord > Plugins
-    
+
+# Credits
 - [Sophia](https://github.com/sophiaasophieee/)
