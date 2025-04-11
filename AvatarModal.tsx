@@ -56,15 +56,17 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string, modalPr
 
         const css = Object.entries(avatars)
             .map(([id, url]) => `
-img[src*="cdn.discordapp.com/avatars/${id}"] {
-    content: url("${url}") !important;
-}`)
+    img[src*="cdn.discordapp.com/avatars/${id}"] {
+        content: url("${url}") !important;
+    }`)
             .join("\n");
 
         await set(KEY_STYLESHEET, css);
 
         if (settings.store.enableReloadWarning) {
             setShowReloadModal(true);
+        } else {
+            modalProps.onClose();
         }
     }
 
@@ -74,15 +76,17 @@ img[src*="cdn.discordapp.com/avatars/${id}"] {
 
         const css = Object.entries(avatars)
             .map(([id, url]) => `
-img[src*="cdn.discordapp.com/avatars/${id}"] {
-    content: url("${url}") !important;
-}`)
+    img[src*="cdn.discordapp.com/avatars/${id}"] {
+        content: url("${url}") !important;
+    }`)
             .join("\n");
 
         await set(KEY_STYLESHEET, css);
 
         if (settings.store.enableReloadWarning) {
             setShowReloadModal(true);
+        } else {
+            modalProps.onClose();
         }
     }
 
