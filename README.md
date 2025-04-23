@@ -14,4 +14,4 @@ Now I know the top one LOOKS appealing but that's not the main focus<br><br>
 5. Enable the plugin in Settings > Vencord/Equicord > Plugins
 
 # Credits
-- [Sophia](https://github.com/sophiaasophieee/)
+- [Sophie](https://github.com/soap-phia/)
