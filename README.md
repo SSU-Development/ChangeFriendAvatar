@@ -15,3 +15,4 @@ Now I know the top one LOOKS appealing but that's not the main focus<br><br>
 
 # Credits
 - [Sophie](https://github.com/soap-phia/)
+- [EpicDevices](https://github.com/epic-devices/)
